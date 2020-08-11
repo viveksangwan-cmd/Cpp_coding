@@ -33,22 +33,46 @@ void sublime()
 	freopen("output.TXT", "w", stdout);
 #endif
 }
-int dp[101][101];
-int knapsack(int wt[], int val[], int z, int n)
-{
-	if (n == 0 || z == 0) return 0;
-	if (dp[z][n] != -1) return dp[z][n];
-	if (wt[n - 1] <= z) return dp[z][n] = max(val[n - 1] + knapsack(wt, val, z - wt[n - 1], n - 1), knapsack(wt, val, z, n - 1));
-	return dp[z][n] = knapsack(wt, val, z, n - 1);
-}
 
+bool inside(int row, int col)
+{
+	return row >= 0 && row <= 7 && col >= 0 && col <= 7;
+}
+vector<vector<int>> queensAttacktheKing(vector<vector<int>>& queens, vector<int>& king) {
+	vector<vector<int>> ans;
+	vector<vector<bool>> t(8, vector<bool>(8));
+	for (auto queen : queens)
+	{
+		t[queen[0]][queen[1]] = true;
+	}
+	for (int d1 = -1; d1 <= 1; d1++)
+	{
+		for (int d2 = -1; d2 <= 1; d2++)
+		{
+			if (d1 == 0 && d2 == 0) continue;
+			int row = king[0];
+			int col = king[1];
+			do
+			{
+				row += d1;
+				col += d2;
+			} while (inside(row, col) && !(t[row][col]));
+			if (inside(row, col)) ans.push_back({row, col});
+		}
+	}
+	return ans;
+}
 
 int32_t main()
 {
 	sublime();
-	int wt[4] = {1, 2, 4, 5}, val[4] = {1, 4, 5, 7};
-	int z = 7;
-	memset(dp, -1, sizeof(dp));
-	cout << knapsack(wt, val, z, (int)4); //11
+	// leetcode
+	vector<vi> queens{{0, 1}, {1, 0}, {4, 0}, {0, 4}, {3, 3}, {2, 4}}, ans;
+	vi king = {0, 0};
+	ans = queensAttacktheKing(queens, king);
+	for (auto i : ans) cout << i[0] << " " << i[1] << endl;
 	return 0;
 }
+
+
+//queens = [[0,1],[1,0],[4,0],[0,4],[3,3],[2,4]], king = [0,0]

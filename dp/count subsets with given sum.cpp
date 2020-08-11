@@ -33,22 +33,44 @@ void sublime()
 	freopen("output.TXT", "w", stdout);
 #endif
 }
-int dp[101][101];
-int knapsack(int wt[], int val[], int z, int n)
+
+int t[101][101];
+int countSubsetSum(vi v, int sum, int n)
 {
-	if (n == 0 || z == 0) return 0;
-	if (dp[z][n] != -1) return dp[z][n];
-	if (wt[n - 1] <= z) return dp[z][n] = max(val[n - 1] + knapsack(wt, val, z - wt[n - 1], n - 1), knapsack(wt, val, z, n - 1));
-	return dp[z][n] = knapsack(wt, val, z, n - 1);
+	for (int i = 0; i < n + 1; i++)
+	{
+		for (int j = 0; j < sum + 1; j++)
+		{
+			if (j == 0 ) t[i][j] = 1;
+			else if (i == 0) t[i][j] = 0;
+		}
+	}
+	for (int i = 1; i < n + 1; i++)
+	{
+		for (int j = 1; j < sum + 1; j++)
+		{
+			if (v[i - 1] <= sum) t[i][j] = t[i - 1][j] + t[i - 1][j - v[i - 1]];
+			else t[i][j] = t[i - 1][j];
+		}
+	}
+	for (int i = 0; i < n + 1; i++)
+	{
+		for (int j = 0; j < sum + 1; j++)
+		{
+			cout << t[i][j] << " ";
+		}
+		cout << endl;
+	}
+	return t[n][sum];
 }
 
 
 int32_t main()
 {
 	sublime();
-	int wt[4] = {1, 2, 4, 5}, val[4] = {1, 4, 5, 7};
-	int z = 7;
-	memset(dp, -1, sizeof(dp));
-	cout << knapsack(wt, val, z, (int)4); //11
+	vi  arr{ 0, 1, 2};
+	cout << countSubsetSum(arr, 0, 3);
 	return 0;
 }
+
+

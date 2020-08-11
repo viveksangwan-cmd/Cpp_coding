@@ -33,22 +33,41 @@ void sublime()
 	freopen("output.TXT", "w", stdout);
 #endif
 }
+
 int dp[101][101];
-int knapsack(int wt[], int val[], int z, int n)
+int SubsetSumwithMinimumDiff(vi v, int total, int n)
 {
-	if (n == 0 || z == 0) return 0;
-	if (dp[z][n] != -1) return dp[z][n];
-	if (wt[n - 1] <= z) return dp[z][n] = max(val[n - 1] + knapsack(wt, val, z - wt[n - 1], n - 1), knapsack(wt, val, z, n - 1));
-	return dp[z][n] = knapsack(wt, val, z, n - 1);
+	for (int i = 0; i <= n; i++)
+	{
+		for (int j = 0; j <= total / 2; j++)
+			if (j == 0) dp[i][j] = 1;
+			else if (i == 0) dp[i][j] = 0;
+	}
+	for (int i = 1; i <= n; i++)
+	{
+		for (int j = 1; j <= total / 2; j++)
+		{
+			if (v[i - 1] <= total) dp[i][j] = dp[i - 1][j - v[i - 1]] || dp[i - 1][j];
+			else dp[i][j] = dp[i - 1][j];
+		}
+	}
+	for (int i = total / 2; i >= 1; i--)
+	{
+		if (dp[n][i] == 1) return total - 2 * i;
+	}
+	return 0;
 }
+
 
 
 int32_t main()
 {
 	sublime();
-	int wt[4] = {1, 2, 4, 5}, val[4] = {1, 4, 5, 7};
-	int z = 7;
-	memset(dp, -1, sizeof(dp));
-	cout << knapsack(wt, val, z, (int)4); //11
+	vi  arr{ 3, 34, 8, 12, 5, 2};
+	int total = 0, z;
+	for (auto i : arr) total += i;
+	cout << SubsetSumwithMinimumDiff(arr, total, 6); //1
 	return 0;
 }
+
+
