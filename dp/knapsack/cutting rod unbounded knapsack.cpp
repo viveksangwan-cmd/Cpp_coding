@@ -33,39 +33,37 @@ void sublime()
 	freopen("output.TXT", "w", stdout);
 #endif
 }
+int dp[101][101];
 
-bool t[101][101];
-
-bool subsetSUM(vi arr, int Sum, int no)
+int RodCuttingMaxProfit(vi v, int n)
 {
-	rep(i, 0, no + 1)
-	rep(j, 0, Sum + 1)
+	vi length;
+	for (int i = 1; i <= n; i++) length.pb(i);
+	for (int i = 0; i <= n; i++)
 	{
-		if (j == 0) t[i][j] = true;
-		else if (i == 0) t[i][j] = false;
-	}
-	for (int i = 1; i <= no; i++)
-	{
-		for (int j = 1; j <= Sum; j++)
+		for (int j = 0; j <= n; j++)
 		{
-			if (arr[i - 1] <= Sum) t[i][j] = (t[i - 1][j - arr[i - 1]] || t[i - 1][j]);
-			else t[i][j] = t[i - 1][j];
+			if (j == 0) dp[i][j] = 0;
+			else if (i == 0)dp[i][j] = 0;
 		}
 	}
-	rep(i, 0, no + 1)
+	for (int i = 1; i <= n; i++)
 	{
-		rep(j, 0, Sum + 1) cout << t[i][j] << " ";
-		cout << endl;
+		for (int j = 1; j <= n; j++)
+		{
+			if (length[i - 1] <= j)dp[i][j] = max((v[i - 1] + dp[i][j - length[i - 1]]), dp[i - 1][j]);
+			else dp[i][j] = dp[i - 1][j];
+		}
 	}
-
-	return t[no][Sum];
+	return dp[n][n];
 }
+
 
 int32_t main()
 {
 	sublime();
-	vi  arr{ 3, 34, 4, 12, 5, 2};
-	cout << subsetSUM(arr, 9, 6); //1
+	vi  arr{ 1, 5, 8, 9, 10, 17, 17, 20};
+	cout << RodCuttingMaxProfit(arr, 8); //1
 	return 0;
 }
 

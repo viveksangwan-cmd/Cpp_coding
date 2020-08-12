@@ -33,43 +33,47 @@ void sublime()
 	freopen("output.TXT", "w", stdout);
 #endif
 }
+int dp[101][101];
 
-int t[101][101];
-int countSubsetSum(vi v, int sum, int n)
+int LCS(string a, string b, int al, int bl)
 {
-	for (int i = 0; i < n + 1; i++)
+	for (int i = 0; i <= al; i++)
 	{
-		for (int j = 0; j < sum + 1; j++)
+		for (int j = 0; j <= bl; j++)
 		{
-			if (j == 0 ) t[i][j] = 1;
-			else if (i == 0) t[i][j] = 0;
+			if (i == 0 || j == 0) dp[i][j] = 0;
 		}
 	}
-	for (int i = 1; i < n + 1; i++)
+	for (int i = 1; i <= al; i++)
 	{
-		for (int j = 1; j < sum + 1; j++)
+		for (int j = 1; j <= bl; j++)
 		{
-			if (v[i - 1] <= sum) t[i][j] = t[i - 1][j] + t[i - 1][j - v[i - 1]];
-			else t[i][j] = t[i - 1][j];
+			if (a[i - 1] == b[j - 1]) dp[i][j] = 1 + dp[i - 1][j - 1];
+			else dp[i][j] = max(dp[i - 1][j] , dp[i][j - 1] );
 		}
 	}
-	for (int i = 0; i < n + 1; i++)
+	for (int i = 0; i <= al; i++)
 	{
-		for (int j = 0; j < sum + 1; j++)
+		for (int j = 0; j <= bl; j++)
 		{
-			cout << t[i][j] << " ";
+			cout << dp[i][j] << " ";
 		}
 		cout << endl;
 	}
-	return t[n][sum];
+	return dp[al][bl];
+
 }
+
 
 
 int32_t main()
 {
 	sublime();
-	vi  arr{ 0, 1, 2};
-	cout << countSubsetSum(arr, 0, 3);
+	string a, b;
+	a = "abcdefgh";
+	b = "abqcioh";
+	memset(dp, -1, sizeof(dp)); //memset -> -1 or 0 ;
+	cout << LCS(a, b, 8, 7) << endl;//4
 	return 0;
 }
 
