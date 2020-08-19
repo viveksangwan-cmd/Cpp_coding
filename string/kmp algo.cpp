@@ -23,7 +23,7 @@ using namespace std;
 #define w            int x; cin>>x; while(x--)
 #define rep(i,a,b)	for(int i=a;i<b;i++)
 mt19937                 rng(chrono::steady_clock::now().time_since_epoch().count());
-
+#define hypotenuse(a, b) sqrt(a*a+b*b)
 
 void sublime()
 {
@@ -34,53 +34,65 @@ void sublime()
 #endif
 }
 
-int visited[100001];
-vi v[100001];
-int MaxD , max_node ;
-
-void dfs(int source, int dis)
+void kMPString(string txt, string pattern)
 {
-	visited[source] = 1;
-	if (dis > MaxD) MaxD = dis, max_node = source;
-	cout << source << " " << dis << " " << MaxD << endl;
-	for (int i : v[source])
+	int n = txt.length();
+	int m = pattern.length();
+	int i = 1, len = 0, j = 0;
+	vi kamparr(m, 0);
+	while (i < m)
 	{
-		if (visited[i] == 0) dfs(i, dis + 1);
+		if (pattern[i] == pattern[len])
+		{
+			len++;
+			kamparr[i] = len;
+			i++;
+		}
+		else
+		{
+			if (len != 0)
+			{
+				len = kamparr[len - 1];
+			}
+			else
+			{
+				kamparr[i] = 0;
+				i++;
+			}
+		}
+	}
+
+	cout << "KMP suffix array of pattern : " << endl;
+	for (int i = 0; i < m; i++) cout << kamparr[i] << " ";
+	cout << endl;
+
+	i = 0;
+	j = 0;
+	while (i < n)
+	{
+		if (pattern[j] == txt[i])
+		{
+			i++;
+			j++;
+		}
+		if (j == m) cout << "found match at : " << i - j << endl, j = kamparr[j - 1];
+		else if (i < n  && (pattern[j] != txt[i]))
+		{
+			if (j != 0) j = kamparr[j - 1];
+			else
+			{
+				i++;
+			}
+		}
 	}
 }
-
 
 int32_t main()
 {
 	sublime();
-	int n;
-	cin >> n;
-	for (int i = 1; i <= n; i++) visited[i] = 0, v[i].clear();
-	for (int i = 1; i <= n - 1; i++)
-	{
-		int a, b;
-		cin >> a >> b;
-		v[a].pb(b);
-		v[b].pb(a);
-	}
-	MaxD = -1;
-	dfs(1, 0);
-
-	for (int i = 1; i <= n; i++) visited[i] = 0;
-
-	MaxD = -1;
-	dfs(max_node, 0);
-
-	cout << MaxD << endl;
+	string txt = "ababcabcabababd" , pattern = "ababd";
+	kMPString(txt, pattern);
 	return 0;
 }
 
-/*
-1
-6
-1 2
-1 3
-1 4
-2 5
-2 6
-*/
+
