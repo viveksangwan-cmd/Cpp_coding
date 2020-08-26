@@ -19,7 +19,7 @@ public:   //public
 	emp(string n) {name = n;}
 };
 
-string name_of_emp(emp x) // input arfument as object name , object whose data to be access
+string name_of_emp(emp x) // input argument as object name , object whose data to be access
 {
 	return x.name;
 }
