@@ -17,7 +17,6 @@ void primeFact(int n)
 	{
 		if (n % i == 0)
 		{
-			int m = n;
 			int count = 0;
 			while (n % i == 0)
 			{

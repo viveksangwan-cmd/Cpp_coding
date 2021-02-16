@@ -18,7 +18,7 @@ void sieve()
 	int n = 100001;
 	for (int i = 0; i <= n; i++) arr[i] = -1;
 	arr[0] = arr[1] = 0;
-	for (int i = 2; i <= n; i++)
+	for (int i = 2; i*i <= n; i++)
 	{
 		if (arr[i] == -1)
 		{
